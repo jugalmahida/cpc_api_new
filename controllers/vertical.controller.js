@@ -1,12 +1,19 @@
 const Vertical = require("../models/vertical.model");
+const path = require("path");
+const fs = require("fs");
 
 // Create a new vertical
 exports.createVertical = async (req, res) => {
     try {
         const { name, description, code } = req.body;
 
+        let imageUrl = null;
+        if (req.file) {
+            imageUrl = `${req.protocol}://${req.get("host")}/uploads/verticals/${req.file.filename}`;
+        }
+
         // Create and save the new vertical
-        const newVertical = await Vertical.create({ name, description, code });
+        const newVertical = await Vertical.create({ name, description, code, imageUrl });
 
         res.status(201).json({
             status: "success",
@@ -68,6 +75,25 @@ exports.updateVertical = async (req, res) => {
         const { id } = req.params;
         const updateData = req.body;
 
+        if (req.file) {
+            
+            updateData.imageUrl = `${req.protocol}://${req.get("host")}/uploads/verticals/${req.file.filename}`;
+
+            // Fetch the existing faculty member to get the old image URL
+            const existingVertical = await Vertical.findById(id);
+            if (!existingVertical) {
+                return res.status(404).json({ status: "error", message: "Vertical not found" });
+            }
+
+            // Delete the old image file if it exists
+            if (existingVertical.imageUrl) {
+                const oldFilePath = path.join(__dirname, "../uploads/verticals/", path.basename(existingVertical.imageUrl));
+                if (fs.existsSync(oldFilePath)) {
+                    fs.unlinkSync(oldFilePath);
+                }
+            }
+        }
+
         const updatedVertical = await Vertical.findByIdAndUpdate(id, updateData, { new: true });
 
         if (!updatedVertical) {
@@ -94,14 +120,25 @@ exports.updateVertical = async (req, res) => {
 exports.deleteVertical = async (req, res) => {
     try {
         const { id } = req.params;
-        const deletedVertical = await Vertical.findByIdAndDelete(id);
 
-        if (!deletedVertical) {
+        const vertical = await Vertical.findById(id);
+
+        if (!vertical) {
             return res.status(404).json({
                 status: "error",
                 message: "Vertical not found"
             });
         }
+
+        // Delete profile image if it exists
+        if (vertical.imageUrl) {
+            const filePath = path.join(__dirname, "../uploads/verticals/", path.basename(vertical.imageUrl));
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        }
+
+        await Vertical.findByIdAndDelete(id);
 
         res.status(200).json({
             status: "success",

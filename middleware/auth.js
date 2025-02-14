@@ -1,4 +1,3 @@
-// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
@@ -22,7 +21,7 @@ const authMiddleware = (req, res, next) => {
         // Proceed to the next middleware or route handler
         next();
     } catch (error) {
-        res.status(400).json({
+        return res.status(400).json({
             status: "error",
             message: "Invalid token."
         });

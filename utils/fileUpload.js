@@ -14,6 +14,7 @@ const createUploadDir = (dir) => {
 
 // File type validation
 const fileFilter = (req, file, cb) => {
+
     const allowedImageTypes = [
         'image/jpeg',
         'image/jpg',
@@ -38,7 +39,7 @@ const fileFilter = (req, file, cb) => {
             cb(null, true);
         }
     }
-    else if (['profileImage', 'eventImage'].includes(file.fieldname)) {
+    else if (['profileImage', 'eventImage','verticals'].includes(file.fieldname)) {
         if (!allowedImageTypes.includes(file.mimetype)) {
             cb(new Error('Only JPEG, JPG & PNG images are allowed!'), false);
         } else {
@@ -68,6 +69,9 @@ const storage = multer.diskStorage({
                 break;
             case "announcementFile":
                 uploadDir = path.join(baseUploadDir, "announcementFile");
+                break;
+            case "verticals":
+                uploadDir = path.join(baseUploadDir, "verticals");
                 break;
             default:
                 uploadDir = baseUploadDir;
