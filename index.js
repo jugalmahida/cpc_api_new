@@ -5,8 +5,16 @@ const path = require("path");
 require('dotenv').config();
 const cors = require("cors");
 
+const allowedDomains = process.env.ALLOWED_DOMAINS.split(",");
+
 app.use(cors({
-    origin: "*",
+    origin: (origin, callback) => {
+        if (!origin || allowedDomains.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("CORS policy: This domain is not allowed"));
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
