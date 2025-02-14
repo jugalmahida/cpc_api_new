@@ -1,6 +1,7 @@
 const Vertical = require("../models/vertical.model");
 const path = require("path");
 const fs = require("fs");
+const host = process.env.APIHOST 
 
 // Create a new vertical
 exports.createVertical = async (req, res) => {
@@ -9,9 +10,9 @@ exports.createVertical = async (req, res) => {
 
         let imageUrl = null;
         if (req.file) {
-            imageUrl = `${req.protocol}://${req.get("host")}/uploads/verticals/${req.file.filename}`;
+            imageUrl = `${host}/uploads/verticals/${req.file.filename}`;
         }
-
+        
         // Create and save the new vertical
         const newVertical = await Vertical.create({ name, description, code, imageUrl });
 
@@ -76,10 +77,10 @@ exports.updateVertical = async (req, res) => {
         const updateData = req.body;
 
         if (req.file) {
-            
-            updateData.imageUrl = `${req.protocol}://${req.get("host")}/uploads/verticals/${req.file.filename}`;
 
-            // Fetch the existing faculty member to get the old image URL
+            updateData.imageUrl = `${host}/uploads/verticals/${req.file.filename}`;
+
+            // Fetch the existing vertical to get the old image URL
             const existingVertical = await Vertical.findById(id);
             if (!existingVertical) {
                 return res.status(404).json({ status: "error", message: "Vertical not found" });
