@@ -2,7 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const Event = require("../models/event.model");
 const EventImage = require("../models/eventImages.model");
-const { log } = require("console");
+
+require('dotenv').config();
 const host = process.env.APIHOST 
 // Create a new event
 exports.createEvent = async (req, res) => {
