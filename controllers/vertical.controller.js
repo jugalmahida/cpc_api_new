@@ -1,6 +1,7 @@
 const Vertical = require("../models/vertical.model");
 const path = require("path");
 const fs = require("fs");
+require('dotenv').config();
 const host = process.env.APIHOST 
 
 // Create a new vertical

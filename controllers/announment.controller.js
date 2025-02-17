@@ -1,7 +1,8 @@
 const Announcement = require("../models/announcement.model");
 const fs = require('fs');
 const path = require('path');
-
+require('dotenv').config();
+const host = process.env.APIHOST 
 // Create a new announcement
 exports.createAnnouncement = async (req, res) => {
     try {
@@ -14,7 +15,7 @@ exports.createAnnouncement = async (req, res) => {
 
         let file_attachments = null;
         if (req.file) {
-            const BASE_URL = `${req.protocol}://${req.get("host")}/uploads/announcementFile/`;
+            const BASE_URL = `${host}/uploads/announcementFile/`;
             file_attachments = BASE_URL + req.file.filename;
         }
 
@@ -109,7 +110,7 @@ exports.updateAnnouncement = async (req, res) => {
             }
 
             // Set the new file URL in the update data
-            const BASE_URL = `${req.protocol}://${req.get("host")}/uploads/announcementFile/`;
+            const BASE_URL = `${host}/uploads/announcementFile/`;
             updateData.file_attachments = BASE_URL + req.file.filename;
         }
 

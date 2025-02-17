@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const Placement = require("../models/placement.model");
+require('dotenv').config();
+const host = process.env.APIHOST 
 
 // Create a new placement record
 exports.createPlacement = async (req, res) => {
@@ -8,7 +10,7 @@ exports.createPlacement = async (req, res) => {
         const { student_name, company_name, package, vertical_id, year } = req.body;
         let student_image_url = null;
 
-        const BASE_URL = `${req.protocol}://${req.get("host")}/uploads/profileImage/`;
+        const BASE_URL = `${host}/uploads/profileImage/`;
 
         if (req.file) {
             const timestamp = Date.now();
@@ -41,7 +43,7 @@ exports.updatePlacement = async (req, res) => {
         const { student_name, company_name, package, course_id, year } = req.body;
         let newStudentImageUrl = null;
 
-        const BASE_URL = `${req.protocol}://${req.get("host")}/uploads/profileImage/`;
+        const BASE_URL = `${host}/uploads/profileImage/`;
 
         if (req.file) {
             const timestamp = Date.now();

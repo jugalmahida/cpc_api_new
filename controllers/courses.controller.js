@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const Course = require("../models/courses.model");
-
+require('dotenv').config();
+const host = process.env.APIHOST 
 // Create a new course
 exports.createCourse = async (req, res) => {
     try {
@@ -9,7 +10,7 @@ exports.createCourse = async (req, res) => {
         const filePath = req.file ? req.file.path : null;
 
         // Generate a public URL
-        const publicFileUrl = req.file ? `${req.protocol}://${req.get("host")}/uploads/pdfs/${req.file.filename}` : null;
+        const publicFileUrl = req.file ? `${host}/uploads/pdfs/${req.file.filename}` : null;
 
         // Create a new course
         const newCourse = await Course.create({
@@ -106,7 +107,7 @@ exports.updateCourse = async (req, res) => {
         const { name, description, totalSeats, duration, course_type, vertical_id } = req.body;
 
         let newFilePath = null;
-        const BASE_URL = `${req.protocol}://${req.get("host")}/uploads/pdfs/`;
+        const BASE_URL = `${host}/uploads/pdfs/`;
 
         if (req.file) {
             const newFileName = `pdf-${Date.now()}-${Math.floor(Math.random() * 1000000000)}.pdf`;

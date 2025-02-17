@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const Job = require('../models/job.model');
+require('dotenv').config();
+const host = process.env.APIHOST 
 
 // Create a new job post with a file attachment
 exports.createJob = async (req, res) => {
@@ -10,7 +12,7 @@ exports.createJob = async (req, res) => {
         // Handle file attachment if it exists
         let file_attachments = '';
         if (req.file) {
-            const BASE_URL = `${req.protocol}://${req.get("host")}/uploads/announcementFile/`;
+            const BASE_URL = `${host}/uploads/announcementFile/`;
             file_attachments = BASE_URL + req.file.filename;
         }
 
@@ -86,7 +88,7 @@ exports.updateJob = async (req, res) => {
             }
 
             // Set the new file URL in the update data
-            const BASE_URL = `${req.protocol}://${req.get("host")}/uploads/announcementFile/`;
+            const BASE_URL = `${host}/uploads/announcementFile/`;
             updateData.file_attachments = BASE_URL + req.file.filename;
         }
 

@@ -1,6 +1,8 @@
 const Faculty = require("../models/faulty.model");
 const fs = require("fs");
 const path = require("path");
+require('dotenv').config();
+const host = process.env.APIHOST 
 
 // Create a new faculty member
 exports.createFaculty = async (req, res) => {
@@ -10,7 +12,7 @@ exports.createFaculty = async (req, res) => {
 
         // If a file is uploaded, generate the URL
         if (req.file) {
-            profileImageUrl = `${req.protocol}://${req.get("host")}/uploads/profileImage/${req.file.filename}`;
+            profileImageUrl = `${host}/uploads/profileImage/${req.file.filename}`;
         }
 
         const faculty = new Faculty({
@@ -71,7 +73,7 @@ exports.updateFaculty = async (req, res) => {
 
         if (req.file) {
             // Generate new profile image URL
-            updates.profileImageUrl = `${req.protocol}://${req.get("host")}/uploads/profileImage/${req.file.filename}`;
+            updates.profileImageUrl = `${host}/uploads/profileImage/${req.file.filename}`;
 
             // Fetch the existing faculty member to get the old image URL
             const existingFaculty = await Faculty.findById(id);

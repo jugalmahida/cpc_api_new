@@ -3,7 +3,7 @@ const path = require("path");
 const Event = require("../models/event.model");
 const EventImage = require("../models/eventImages.model");
 const { log } = require("console");
-
+const host = process.env.APIHOST 
 // Create a new event
 exports.createEvent = async (req, res) => {
     try {
@@ -189,7 +189,7 @@ exports.addEventImage = async (req, res) => {
 
             fs.renameSync(file.path, newFilePath);
 
-            const imageUrl = `${req.protocol}://${req.get("host")}/uploads/events/${newFileName}`;
+            const imageUrl = `${host}/uploads/events/${newFileName}`;
 
             const newImage = new EventImage({
                 imageUrl,
@@ -281,7 +281,7 @@ exports.updateEventImage = async (req, res) => {
 
         fs.renameSync(req.file.path, newFilePath);
 
-        const newImageUrl = `${req.protocol}://${req.get("host")}/uploads/events/${newFileName}`;
+        const newImageUrl = `${host}/uploads/events/${newFileName}`;
 
         // Update image in DB
         image.imageUrl = newImageUrl;
