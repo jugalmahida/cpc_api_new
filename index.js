@@ -4,6 +4,7 @@ const app = express();
 const path = require("path");
 require('dotenv').config();
 const cors = require("cors");
+const rateLimit = require("express-rate-limit"); // Import rate limiter
 
 const allowedDomains = process.env.ALLOWED_DOMAINS.split(",");
 
@@ -22,6 +23,17 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Apply rate limiting to all API routes
+const apiLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 100, // Max 100 requests per IP per minute
+    message: { success: false, error: "Too many requests, please try again later." },
+    headers: true, // Send rate limit info in headers
+});
+
+// Apply rate limiting to all API endpoints
+app.use("/api/", apiLimiter);
 
 const port = process.env.PORT;
 const version = process.env.VERSION;
