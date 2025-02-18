@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getTotalVisits } = require('../controllers/visit.controller');
+const visitController = require('../controllers/visit.controller');
 
-router.get('/getCount', getTotalVisits);
+router.get('/getCount', visitController.getTotalVisits);
+
+// Increment the counter
+router.get("/incrementCount", visitController.incrementVisitCount);
 
 module.exports = router;

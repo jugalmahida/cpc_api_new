@@ -27,13 +27,6 @@ const port = process.env.PORT;
 const version = process.env.VERSION;
 const hostname = process.env.HOSTNAME;
 
-const { incrementVisitCount } = require("./controllers/visit.controller");
-
-// Increment the counter
-app.get("/", incrementVisitCount, (req, res) => {
-    res.status(200).json({ "success": "true", "message": "welcome the api of cpc",  });
-});
-
 // Define the all routes
 const authRoutes = require('./routes/admin.route');
 const verticalRoutes = require("./routes/vertical.route")

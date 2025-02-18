@@ -4,6 +4,7 @@ const Visit = require("../models/visit.model");
 exports.incrementVisitCount = async (req, res, next) => {
     try {
         const visit = await Visit.findOneAndUpdate({}, { $inc: { total_visits: 1 } }, { new: true, upsert: true });
+        res.json({"success":true,"message":"Thank you for visiting"});
         next(); // Continue to the next middleware
     } catch (error) {
         console.error("Error updating visit count:", error);
