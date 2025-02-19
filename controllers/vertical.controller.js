@@ -3,6 +3,8 @@ const path = require("path");
 const fs = require("fs");
 require('dotenv').config();
 const host = process.env.APIHOST 
+const Faculty = require("../models/faulty.model");
+const Course = require("../models/courses.model");
 
 // Create a new vertical
 exports.createVertical = async (req, res) => {
@@ -34,8 +36,9 @@ exports.createVertical = async (req, res) => {
 exports.getVerticalById = async (req, res) => {
     try {
         const { id } = req.params;
-        const vertical = await Vertical.findById(id);
 
+        // Fetch the vertical
+        const vertical = await Vertical.findById(id);
         if (!vertical) {
             return res.status(404).json({
                 status: "error",
@@ -43,9 +46,19 @@ exports.getVerticalById = async (req, res) => {
             });
         }
 
+        // Fetch faculty members related to this vertical
+        const faculty = await Faculty.find({ vertical_id: id });
+
+        // Fetch courses related to this vertical
+        const courses = await Course.find({ vertical_id: id });
+
         res.status(200).json({
             status: "success",
-            data: vertical
+            data: {
+                vertical,
+                faculty,
+                courses
+            }
         });
     } catch (error) {
         res.status(500).json({
@@ -54,6 +67,7 @@ exports.getVerticalById = async (req, res) => {
         });
     }
 };
+
 
 // Get all verticals
 exports.getAllVerticals = async (req, res) => {
