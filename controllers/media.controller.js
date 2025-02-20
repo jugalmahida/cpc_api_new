@@ -40,7 +40,10 @@ exports.uploadMedia = async (req, res) => {
 exports.getAllMedia = async (req, res) => {
     try {
         const media = await Media.find().sort({ createdAt: -1 });
-        res.status(200).json(media);
+        res.status(200).json({
+            status: "success",
+            data : media,
+        });
     } catch (error) {
         res.status(500).json({ status: "error", message: error.message });
     }
