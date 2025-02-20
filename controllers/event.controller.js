@@ -64,7 +64,7 @@ exports.getEventById = async (req, res) => {
 // Get all events with images
 exports.getAllEvents = async (req, res) => {
     try {
-        const events = await Event.find({}, { __v: 0, createdAt: 0, updatedAt: 0 }).populate("images");
+        const events = await Event.find({}, { __v: 0, createdAt: 0, updatedAt: 0, images:0 });
         return res.status(200).json({ status: "success", data: events });
     } catch (error) {
         res.status(500).json({ status: "error", message: error.message });
