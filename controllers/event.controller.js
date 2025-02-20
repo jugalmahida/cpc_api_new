@@ -4,7 +4,7 @@ const Event = require("../models/event.model");
 const EventImage = require("../models/eventImages.model");
 
 require('dotenv').config();
-const host = process.env.APIHOST 
+const host = process.env.APIHOST
 // Create a new event
 exports.createEvent = async (req, res) => {
     try {
@@ -28,7 +28,7 @@ exports.getEventById = async (req, res) => {
         const { id } = req.params;
 
         // Find the event and populate images
-        const event = await Event.findById(id, { __v: 0, createdAt: 0, updatedAt: 0, event: 0,date:0 })
+        const event = await Event.findById(id, { __v: 0, createdAt: 0, updatedAt: 0, event: 0, date: 0 })
             .populate({
                 path: "images",
                 select: "-__v -createdAt -updatedAt -event",
@@ -60,16 +60,48 @@ exports.getEventById = async (req, res) => {
         res.status(500).json({ status: "error", message: error.message });
     }
 };
-
-// Get all events with images
 exports.getAllEvents = async (req, res) => {
     try {
-        const events = await Event.find({}, { __v: 0, createdAt: 0, updatedAt: 0, images:0 });
-        return res.status(200).json({ status: "success", data: events });
+        const events = await Event.find({}, { __v: 0, createdAt: 0, updatedAt: 0 }).populate({
+            path: "images",
+            select: "-__v -createdAt -updatedAt -event",
+        });
+
+        // Initialize an array to store structured event data
+        const structuredEvents = [];
+
+        // Iterate over all events
+        events.forEach(event => {
+            const eventData = {
+                _id: event._id, // Move _id to top level
+                name: event.name,
+                images: {}
+            };
+
+            if (event.images && event.images.length > 0) {
+                event.images.forEach(image => {
+                    const yearMonthKey = image.date.toISOString().slice(0, 7); // Extract "YYYY-MM"
+
+                    if (!eventData.images[yearMonthKey]) {
+                        eventData.images[yearMonthKey] = [];
+                    }
+
+                    eventData.images[yearMonthKey].push(image);
+                });
+            }
+
+            structuredEvents.push(eventData);
+        });
+
+        return res.status(200).json({
+            status: "success",
+            data: structuredEvents.length === 1 ? structuredEvents[0] : structuredEvents
+        });
     } catch (error) {
         res.status(500).json({ status: "error", message: error.message });
     }
 };
+
 
 // Get event by month
 exports.getEventByMonth = async (req, res) => {
