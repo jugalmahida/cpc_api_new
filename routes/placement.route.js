@@ -15,7 +15,7 @@ router.get('/getById/:id', authMiddleware, placementController.getPlacementById)
 router.get('/getAll', placementController.getAllPlacements);
 
 // Get placement records by vertical id
-router.get('/vertical/:vertical_id', placementController.getPlacementsByVerticalId); // New route
+router.get('/vertical/:id', placementController.getPlacementsByVerticalId); // New route
 
 // Update a placement record by ID
 router.put('/update/:id', authMiddleware, handleFileUpload("profileImage"), placementController.updatePlacement);

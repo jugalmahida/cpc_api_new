@@ -132,8 +132,8 @@ exports.getAllPlacements = async (req, res) => {
 // Get placements by course ID
 exports.getPlacementsByVerticalId = async (req, res) => {
     try {
-        const { course_id } = req.params;
-        const placements = await Placement.find({ course_id });
+        const { id } = req.params;
+        const placements = await Placement.find({ vertical_id: id });
         return res.status(200).json({ status: "success", data: placements });
     } catch (error) {
         res.status(500).json({ status: "error", message: error.message });
