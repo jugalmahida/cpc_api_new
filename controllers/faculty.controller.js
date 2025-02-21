@@ -3,11 +3,10 @@ const fs = require("fs");
 const path = require("path");
 require('dotenv').config();
 const host = process.env.APIHOST 
-
 // Create a new faculty member
 exports.createFaculty = async (req, res) => {
     try {
-        const { name, position, briefProfile, qualifications, areasOfInterest, achievements, publications, vertical_id } = req.body;
+        const { name, position, briefProfile, qualifications, areasOfInterest, achievements, publications, vertical_id, committees_id } = req.body;
         let profileImageUrl = null;
 
         // If a file is uploaded, generate the URL
@@ -15,8 +14,20 @@ exports.createFaculty = async (req, res) => {
             profileImageUrl = `${host}/uploads/profileImage/${req.file.filename}`;
         }
 
+        // Check if committees_id is provided, otherwise set it to null
+        const committeesIdToSave = committees_id === undefined || committees_id === "" ? null : committees_id;  // Key change
+
         const faculty = new Faculty({
-            name, position, profileImageUrl, briefProfile, qualifications, areasOfInterest, achievements, publications, vertical_id
+            name,
+            position,
+            profileImageUrl,
+            briefProfile,
+            qualifications,
+            areasOfInterest,
+            achievements,
+            publications,
+            vertical_id,
+            committees_id: committeesIdToSave // Use the potentially null value
         });
 
         await faculty.save();
@@ -26,7 +37,6 @@ exports.createFaculty = async (req, res) => {
         res.status(500).json({ status: "error", message: error.message });
     }
 };
-
 // Get a faculty member by ID
 exports.getFacultyById = async (req, res) => {
     try {

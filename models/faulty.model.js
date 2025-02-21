@@ -10,7 +10,8 @@ const facultySchema = new mongoose.Schema(
         areasOfInterest: { type: String },
         achievements: { type: String },
         publications: { type: String },
-        vertical_id: { type: mongoose.Schema.Types.ObjectId, ref: "Vertical", required: true }
+        vertical_id: { type: mongoose.Schema.Types.ObjectId, ref: "Vertical", required: true },
+        committees_id: { type: mongoose.Schema.Types.ObjectId, ref: "Committees", default: null },
     },
     { timestamps: true } // Automatically adds `createdAt` and `updatedAt`
 );

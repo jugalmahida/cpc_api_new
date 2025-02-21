@@ -51,6 +51,8 @@ const announcementRoutes = require("./routes/announment.route");
 const jobRoutes = require("./routes/job.route");
 const visitRoutes = require("./routes/visit.route");
 const mediaRoutes = require("./routes/media.route");
+const committeesRoutes = require("./routes/committees.route");
+
 
 
 // Use string interpolation for version
@@ -65,6 +67,8 @@ app.use(`/api/${version}/event`, eventRoutes);
 app.use(`/api/${version}/announcement`, announcementRoutes);
 app.use(`/api/${version}/jobs`, jobRoutes);
 app.use(`/api/${version}/media`, mediaRoutes);
+app.use(`/api/${version}/committees`, committeesRoutes);
+
 
 
 
