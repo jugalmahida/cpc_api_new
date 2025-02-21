@@ -15,6 +15,9 @@ router.get('/getById/:id', committeeController.getById);
 // Get all
 router.get('/getAll', committeeController.getAll);
 
+// Remove Faculty from committees
+router.post('/removeFaculty/:facultyId', authMiddleware,committeeController.removeFaculty);
+
 // Delete
 router.delete('/delete/:id', authMiddleware, committeeController.delete);
 
